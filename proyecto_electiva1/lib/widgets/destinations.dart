@@ -1,80 +1,117 @@
 import 'package:flutter/material.dart';
 
 class Destinations extends StatelessWidget {
-  const Destinations({super.key});
+  const Destinations({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          color: Colors.white,
-          child: const Column(
-            children: [
-              LocationTile(
-                icon: Icons.location_on,
-                title: 'Edificio A',
-                subtitle: '25 min',
-                color: Colors.yellow,
-              ),
-              LocationTile(
-                icon: Icons.location_on,
-                title: 'Edificio L',
-                subtitle: '12 min',
-                color: Colors.red,
-              ),
-              LocationTile(
-                icon: Icons.home,
-                title: 'Central',
-                subtitle: '5 min',
-                color: Colors.black,
-              ),
-            ],
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          _buildDestinationTile(
+            context,
+            icon: Icons.place,
+            color: Colors.yellow,
+            title: 'Edificio A',
+            time: '25 min',
+            destinationInfo: 'Este es el Edificio A, donde se imparten clases de informática.',
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: ElevatedButton(
-            onPressed: () {},
+          _buildDestinationTile(
+            context,
+            icon: Icons.place,
+            color: Colors.red,
+            title: 'Edificio L',
+            time: '12 min',
+            destinationInfo: 'Este es el Edificio L, donde están los laboratorios.',
+          ),
+          _buildDestinationTile(
+            context,
+            icon: Icons.home,
+            color: Colors.black,
+            title: 'Central',
+            time: '5 min',
+            destinationInfo: 'Este es el edificio central de la universidad.',
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // Acción del botón "Vamos!"
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellow,
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
               foregroundColor: Colors.black,
             ),
             child: const Text('Vamos!'),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
-}
 
-class LocationTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Color color;
-
-  const LocationTile({super.key, 
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildDestinationTile(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required String title,
+    required String time,
+    required String destinationInfo,
+  }) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: color,
-        child: Icon(icon, color: Colors.white),
+      leading: Icon(icon, color: color),
+      title: Text(title),
+      subtitle: Text(time),
+      onTap: () {
+        _showDestinationModal(context, destinationInfo);
+      },
+    );
+  }
+
+  void _showDestinationModal(BuildContext context, String destinationInfo) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
-      title: Text(title, style: const TextStyle(color: Colors.black)),
-      subtitle: Text(subtitle, style: const TextStyle(color: Colors.black54)),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Ajusta la hoja modal al contenido
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Información del Destino',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                destinationInfo,
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Cerrar el modal
+                  // Aquí puedes agregar la funcionalidad para "ir"
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.yellow, // Color de fondo del botón
+                  foregroundColor: Colors.black,  // Color del texto
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                ),
+                child: const Text('Ir'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

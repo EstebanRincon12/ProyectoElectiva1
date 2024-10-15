@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:proyecto_electiva1/pages/add_favorite_screen.dart';
+import 'package:proyecto_electiva1/widgets/addSiteModal.dart';
+import 'package:proyecto_electiva1/widgets/addSiteScreen.dart';
 import 'package:proyecto_electiva1/widgets/destinations.dart';
 
 class MapScreen extends StatelessWidget {
@@ -54,6 +56,25 @@ class MapScreen extends StatelessWidget {
             backgroundColor: Colors.green,
             onTap: () {
               print('Comenzar Recorrido');
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.place, color: Colors.white),
+            label: 'Añadir Sitio',
+            backgroundColor: Colors.yellow,
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled:
+                    true, // Permite que el modal ocupe más espacio
+                backgroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                builder: (BuildContext context) {
+                  return const AddSiteModal();
+                },
+              );
             },
           ),
           SpeedDialChild(
